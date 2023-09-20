@@ -6,6 +6,7 @@ library(caper)
 library(phytools)
 library(viridis)
 library(MuMIn)
+library(dplyr)
 
 #load data
 anole <- read_csv("anole.dat.csv")
@@ -95,10 +96,9 @@ PerchHeightModel <- lm(HTotal~SVL*PH,anole.log)
 PerchDiameterModel <- lm(HTotal~SVL*ArbPD,anole.log)
 
 ##Question 3## - Plot Residuals For The Above Models
-PHMResiduals <- PerchHeightModel$residuals
-PDMResiduals <- PerchDiameterModel$residuals
+PHMRes <- PerchHeightModel$residuals
+PDMRes <- PerchDiameterModel$residuals
 anole.log %>% 
-  mutate(PHMResiduals,PDMResiduals)
-
-
-
+  mutate(PHMRes,PDMRes)
+ggplot(anole.log, aes(PH,PHMRes)) + geom_point()
+ggplot(anole.log,aes(ArbPD,PDMRes)) + geom_point()
