@@ -93,3 +93,12 @@ anole.log
 ## Question 2 ## - Generate two simple linear models that assess the effect of perch diameter and height
 PerchHeightModel <- lm(HTotal~SVL*PH,anole.log)
 PerchDiameterModel <- lm(HTotal~SVL*ArbPD,anole.log)
+
+##Question 3## - Plot Residuals For The Above Models
+PHMResiduals <- PerchHeightModel$residuals
+PDMResiduals <- PerchDiameterModel$residuals
+anole.log %>% 
+  mutate(PHMResiduals,PDMResiduals)
+
+
+
