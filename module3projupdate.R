@@ -111,6 +111,16 @@ pgls.BM4 <- gls(HTotal ~SVL *PDMRes, correlation = corBrownian(1,phy=anole.tree,
 #PGSL model with the hindlimb-SVL relationship + perch height + perch diameter
 pgls.BM5 <- gls(HTotal ~SVL *PHMRes *PDMRes, correlation = corBrownian(1,phy=anole.tree,form=~Species),data=anole.log, method = "ML")
 
-#question 5 - AIC
+#question 5 - AIC, the most negative fit constitutes as a good fit. Therefore, pgls.BM5 is the best model for our data. Furthermore, the combined relationship of perch height and perch diameter are significant predictors of hindlimb length.
 anole.phylo2.aic <- AICc(pgls.BM3,pgls.BM4,pgls.BM5)
 aicw(anole.phylo2.aic$AICc)
+
+#question 6
+anova(pgls.BM5)
+anole.log <- anole.log%>%
+  mutate(phylo.res=residuals(pgls.BM5))
+
+p.eco.phylo2 <- anole.log%>%
+  ggplot(aes(x=Ecomorph2,y=phylo.res)) +geom_boxplot() +stat_summary(fun=mean, geom="point", size=3)
+
+print(p.eco.phylo2)
