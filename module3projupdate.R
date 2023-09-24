@@ -92,8 +92,8 @@ anole.log%>%
   facet_grid(name~.,scales = "free_y")+ylab("residual")
 anole.log
 ## Question 2 ## - Generate two simple linear models that assess the effect of perch diameter and height
-PerchHeightModel <- lm(HTotal~SVL*PH,anole.log)
-PerchDiameterModel <- lm(HTotal~SVL*ArbPD,anole.log)
+PerchHeightModel <- lm(HTotal~SVL+PH,anole.log)
+PerchDiameterModel <- lm(HTotal~SVL+ArbPD,anole.log)
 
 ##Question 3## - Plot Residuals For The Above Models
 PHMRes <- PerchHeightModel$residuals
