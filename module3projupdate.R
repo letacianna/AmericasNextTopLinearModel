@@ -48,18 +48,18 @@ PerchDiameterModel <- lm(HTotal~SVL+ArbPD,anole.log)
 ##Question 3## - Plot Residuals For The Above Models
 PHMRes <- PerchHeightModel$residuals
 PDMRes <- PerchDiameterModel$residuals
-anole.log %>% 
+anole.log <- anole.log%>% 
   mutate(PHMRes,PDMRes)
 ggplot(anole.log, aes(PH,PHMRes)) + geom_point()
 ggplot(anole.log,aes(ArbPD,PDMRes)) + geom_point()
 
 #question 4 - phylogenetic least squares models of hindlimn-SVL relationships
 #PGLS model with the hindlimb-SVL relationship + perch height
-pgls.BM3 <- gls(HTotal ~SVL * PHMRes, correlation = corBrownian(1,phy=anole.tree,form=~Species),data=anole.log, method = "ML")
+pgls.BM3 <- gls(HTotal ~SVL + PH, correlation = corBrownian(1,phy=anole.tree,form=~Species),data=anole.log, method = "ML")
 #PGLS model with the hindlimb-SVL relationship + perch diameter
-pgls.BM4 <- gls(HTotal ~SVL *PDMRes, correlation = corBrownian(1,phy=anole.tree,form=~Species),data=anole.log, method = "ML")
+pgls.BM4 <- gls(HTotal ~SVL + ArbPD, correlation = corBrownian(1,phy=anole.tree,form=~Species),data=anole.log, method = "ML")
 #PGSL model with the hindlimb-SVL relationship + perch height + perch diameter
-pgls.BM5 <- gls(HTotal ~SVL *PHMRes *PDMRes, correlation = corBrownian(1,phy=anole.tree,form=~Species),data=anole.log, method = "ML")
+pgls.BM5 <- gls(HTotal ~SVL + ArbPD + PH, correlation = corBrownian(1,phy=anole.tree,form=~Species),data=anole.log, method = "ML")
 
 #question 5 - AIC, the most negative fit constitutes as a good fit. Therefore, pgls.BM5 is the best model for our data. Furthermore, the combined relationship of perch height and perch diameter are significant predictors of hindlimb length.
 anole.phylo2.aic <- AICc(pgls.BM3,pgls.BM4,pgls.BM5)
