@@ -22,12 +22,6 @@ anole.lm <- lm(HTotal~SVL,anole2)
 
 anole.allo <- nls(HTotal~a*SVL^b, start=list(b=1, a=1),data = anole2)
 
-#AICc from the MuMIn package
-anole.aic <- AICc(anole.lm,anole.allo)
-
-#aicw from the geiger package
-anole.aicw <- aicw(anole.aic$AICc)
-
 anole.log.eco.lm <- lm(HTotal~SVL*Ecomorph2,anole.log)
 summary(anole.log.eco.lm)
 anova(anole.log.eco.lm)
@@ -37,7 +31,6 @@ anole.log.aic <- AICc(anole.log.lm,anole.log.eco.lm)
 aicw(anole.log.aic$AICc)
 anole.log <- anole.log %>%
   mutate(res=residuals(anole.log.lm))
-
 anole.tree <- read.tree("anole.tre")
 
 #PGLS under BM, w ecomorph
@@ -73,11 +66,10 @@ anole.phylo2.aic <- AICc(pgls.BM3,pgls.BM4,pgls.BM5)
 aicw(anole.phylo2.aic$AICc)
 
 #question 6
-anova(pgls.BM5)
 anole.log <- anole.log%>%
   mutate(phylo.res=residuals(pgls.BM5))
 
-p.eco.phylo2 <- anole.log%>%
-  ggplot(aes(x=Ecomorph2,y=phylo.res)) +geom_boxplot() +stat_summary(fun=mean, geom="point", size=3)
+HindlimbResPlot <- anole.log%>%
+  ggplot(aes(x=Ecomorph2,y=phylo.res)) +geom_boxplot() +stat_summary(fun=mean, geom="point", size=3) +xlab("Ecomorphs") + ylab("Hindlimb Model Residuals")
 
-print(p.eco.phylo2)
+print(HindlimbResPlot)
